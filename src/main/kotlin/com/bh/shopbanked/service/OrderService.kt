@@ -18,7 +18,7 @@ class OrderService  @Autowired constructor(
     private val orderRepository: OrderRepository,
 ) {
     @Transactional
-    fun createOrder(userId: Long, productId: Long, quantity: Int): Order {
+    fun createOrder(userId: Long, productId: Long, quantity: Int){
         // 1. 根据用户ID获取用户信息
         val user = userRepository.findById(userId)
             .orElseThrow { UserNotFoundException("User not found") }
@@ -50,7 +50,6 @@ class OrderService  @Autowired constructor(
         // 保存订单到数据库
         orderRepository.save(order)
 
-        return order
     }
 
     // 生成订单号的方法
@@ -60,5 +59,13 @@ class OrderService  @Autowired constructor(
         val timestamp = System.currentTimeMillis()
         val random = (Math.random() * 10000).toInt()
         return "ORDER-$timestamp-$random"
+    }
+    @Transactional
+    fun getOrdersByUserId(userId: Long): List<Order> {
+        // Retrieve orders for the specified user
+        val user = userRepository.findById(userId)
+            .orElseThrow { UserNotFoundException("User not found") }
+
+        return orderRepository.findByUser(user)
     }
 }
