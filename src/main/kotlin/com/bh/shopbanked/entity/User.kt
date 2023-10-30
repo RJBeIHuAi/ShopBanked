@@ -21,5 +21,11 @@ data class User(
     // 与订单的一对多关系
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JsonManagedReference
-    var orders: MutableList<Order> = mutableListOf()
+    var orders: MutableList<Order> = mutableListOf(),
+
+    // 与地址卡片的一对多关系
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JsonManagedReference
+    var locationCards: MutableList<LocationData> = mutableListOf()
+
 )

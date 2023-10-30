@@ -1,5 +1,6 @@
 package com.bh.shopbanked.service
 
+import com.bh.shopbanked.Exception.OrderNotFoundException
 import com.bh.shopbanked.Exception.UserNotFoundException
 import com.bh.shopbanked.Repository.OrderItemRepository
 import com.bh.shopbanked.Repository.OrderRepository
@@ -67,5 +68,14 @@ class OrderService  @Autowired constructor(
             .orElseThrow { UserNotFoundException("User not found") }
 
         return orderRepository.findByUser(user)
+    }
+    @Transactional
+    fun deleteOrderById(orderId: Long) {
+        val order = orderRepository.findById(orderId)
+            .orElseThrow { OrderNotFoundException("Order not found") }
+
+        // 在实际应用中，你可以执行其他必要的逻辑，如验证权限等
+
+        orderRepository.delete(order)
     }
 }
